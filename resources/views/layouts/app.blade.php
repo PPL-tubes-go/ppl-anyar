@@ -7,6 +7,13 @@
     <title>{{ $pageTitle ?? 'Do-ty List' }}</title>
     @vite('resources/sass/app.scss')
 </head>
+<style>
+    body {
+        background-image: url('https://marketplace.canva.com/EAFZcmTpKas/1/0/1600w/canva-video-intro-portada-fondo-background-simple-rosa-dorado-U93tpA4NMDA.jpg');
+
+    }
+</style>
+
 <body>
     @include('layouts.nav')
     <div class="container mt-4">
