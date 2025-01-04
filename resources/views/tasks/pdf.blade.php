@@ -37,7 +37,7 @@
     }
 
     tr:nth-child(even) {
-        background-color: wheat;
+        background-color: rgba(255, 255, 255, 0.849);
     }
 </style>
 
