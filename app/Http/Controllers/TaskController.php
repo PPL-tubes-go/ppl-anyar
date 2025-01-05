@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Exports\TasksExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -26,6 +27,7 @@ class TaskController extends Controller
         return view('tasks.create');
     }
 
+
     public function store(Request $request)
     {
         $request->validate([
@@ -43,8 +45,7 @@ class TaskController extends Controller
 
         Task::create($data);
 
-        // Removed SweetAlert
-        // Alert::success('Task Added Successfully', 'Good Luck!');
+        Alert::success('Task Added Successfully', 'Good Luck!');
 
         return redirect()->route('tasks.index');
     }
@@ -81,11 +82,11 @@ class TaskController extends Controller
 
         $task->update($data);
 
-        // Removed SweetAlert
-        // Alert::success('Changed Successfully', 'Your task have been updated.');
+        Alert::success('Changed Successfully', 'Your task have been updated.');
 
         return redirect()->route('tasks.index');
     }
+
 
     public function destroy(Task $task)
     {
@@ -93,10 +94,7 @@ class TaskController extends Controller
             Storage::delete($task->attachment);
         }
         $task->delete();
-
-        // Removed SweetAlert
-        // Alert::success('Deleted Successfully', 'Task Deleted Successfully.');
-
+        Alert::success('Deleted Successfully', 'Task Deleted Successfully.');
         return redirect()->route('tasks.index');
     }
 
@@ -132,13 +130,15 @@ class TaskController extends Controller
         }
     }
 
+
     public function export()
     {
         return Excel::download(new TasksExport, 'tasks.xlsx');
     }
-
     public function exportPDF()
     {
         return (new TasksExport())->exportPDF();
     }
+
+
 }
