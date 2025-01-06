@@ -32,10 +32,9 @@
                             <label for="attachment">Attachment:</label>
                             <input type="file" class="form-control-file" id="attachment" name="attachment">
                             @if ($task->attachment)
-                                <p>Current Attachment: <a href="{{ Storage::url($task->attachment) }}">Download</a></p>
+                                <p>current attachment: <a href="{{ route('tasks.download', $task->id) }}">Download Attachment</a></p>
                             @endif
                         </div>
-                        <br>
                         {{-- <div class="form-group form-check">
                             <input type="checkbox" class="form-check-input" id="completed" name="completed" {{ $task->completed ? 'checked' : '' }}>
                             <label class="form-check-label" for="completed">Completed</label>
