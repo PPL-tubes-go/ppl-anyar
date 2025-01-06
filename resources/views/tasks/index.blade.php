@@ -14,12 +14,14 @@
     @section('content')
         <div class="container mt-4">
             <div class="row mb-0">
-                <h4 class="mb-3 text-center" style="color: black; font-weight: bold;">Do Your Task!</h4>
+                <h4 class="mb-3 text-center" style="color: black; font-weight: bold;">Do Your Task !</h4>
                 <div class="col-xl-4">
                     <div class="d-flex gap-2">
                         <a href="{{ route('tasks.create') }}" class="btn btn-primary btn-danger">Tambah Tugas</a>
                         <a href="{{ route('tasks.export') }}" class="btn btn-success">Export to Excel</a>
                         <a href="{{ route('tasks.export.pdf') }}" class="btn btn-primary">Export to PDF</a>
+
+
                     </div>
                 </div>
             </div>
@@ -35,29 +37,55 @@
                             <th style="width: 10%;">Tugas Dibuat</th>
                             <th style="width: 10%;">Deadline</th>
                             <th style="width: 6%;">Status</th>
+                            <th style="width: 8%;">Attachment</th>
                             <th style="width: 20%;">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($tasks as $task)
-                            <tr>
+                            <tr >
                                 <td>{{ $task->id }}</td>
                                 <td>{{ $task->name }}</td>
                                 <td>{{ $task->description }}</td>
                                 <td>{{ $task->created_at }}</td>
                                 <td>{{ $task->deadline }}</td>
                                 <td>{{ $task->status }}</td>
+                                <td>
+                                    @if ($task->attachment)
+                                        <a href="{{ route('tasks.download', $task->id) }}" class="btn btn-success">Download</a>
+                                    @else
+                                        No Attachment
+                                    @endif
+                                </td>
                                 <td style="text-align: center;">
                                     <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-info">Show</a>
                                     <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-warning">Edit</a>
-                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+                                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;" id="delete-form-{{ $task->id }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                                        <button type="button" class="btn btn-danger" onclick="confirmDelete({{ $task->id }}, '{{ $task->name }}')">Delete</button>
                                     </form>
                                 </td>
                             </tr>
                         @endforeach
+                        {{-- sweetalert js klik --}}
+                        <script>
+                            function confirmDelete(taskId) {
+                                Swal.fire({
+                                    title: 'Are you sure?',
+                                    text: "You won't be able to revert this!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Yes, delete it!'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        document.getElementById('delete-form-' + taskId).submit();
+                                    }
+                                });
+                            }
+                        </script>
                     </tbody>
                 </table>
             </div>
@@ -65,6 +93,7 @@
     @endsection
 
     @vite('resources/js/app.js')
+    @include('sweetalert::alert')
 </body>
 
 </html>
